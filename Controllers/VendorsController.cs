@@ -26,5 +26,18 @@ namespace eda.ordermanager.api.Controllers
             var vendorsFromRepo = _vendorRepository.GetVendors();
             return Ok(vendorsFromRepo);
         }
+
+        [HttpGet("{vendorId}")]
+        public ActionResult<Vendor> GetVendor(int vendorId)
+        {
+            var vendorFromRepo = _vendorRepository.GetVendor(vendorId);
+
+            if (vendorFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(vendorFromRepo);
+        }
     }
 }
