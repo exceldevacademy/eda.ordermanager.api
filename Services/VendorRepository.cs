@@ -35,5 +35,10 @@ namespace eda.ordermanager.api.Services
 
             _context.Vendors.Add(vendor);
         }
+
+        public bool Save()
+        {
+            return (_context.SaveChanges() >= 0);
+        }
     }
 }

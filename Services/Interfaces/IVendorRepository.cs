@@ -11,5 +11,6 @@ namespace eda.ordermanager.api.Services.Interfaces
         Vendor GetVendor(int vendorId);
         IEnumerable<Vendor> GetVendors();
         void AddVendor(Vendor vendor);
+        bool Save();
     }
 }

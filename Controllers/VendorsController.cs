@@ -27,7 +27,7 @@ namespace eda.ordermanager.api.Controllers
             return Ok(vendorsFromRepo);
         }
 
-        [HttpGet("{vendorId}")]
+        [HttpGet("{vendorId}", Name ="GetVendor")]
         public ActionResult<Vendor> GetVendor(int vendorId)
         {
             var vendorFromRepo = _vendorRepository.GetVendor(vendorId);
@@ -38,6 +38,17 @@ namespace eda.ordermanager.api.Controllers
             }
 
             return Ok(vendorFromRepo);
+        }
+
+        [HttpPost]
+        public ActionResult<Vendor> AddVendor(Vendor vendor)
+        {
+            _vendorRepository.AddVendor(vendor);
+            _vendorRepository.Save();
+
+            return CreatedAtRoute("GetVendor",
+                new { vendor.VendorId },
+                vendor);
         }
     }
 }
