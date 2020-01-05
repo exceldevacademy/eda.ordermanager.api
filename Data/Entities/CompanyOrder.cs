@@ -39,5 +39,8 @@ namespace eda.ordermanager.api.Data.Entities
         [Column("Comments")]
         public string Comments { get; set; }
 
+        [ForeignKey("VendorId")]
+        public Vendor Vendor { get; set; }
+
     }
 }
