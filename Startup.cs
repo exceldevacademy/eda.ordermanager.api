@@ -32,6 +32,7 @@ namespace eda.ordermanager.api
 
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
 
             services.AddDbContextPool<OrdersManagerDbContext>(options =>
                 options.UseSqlServer("Server=DESKTOP-O585ETB\\SQLEXPRESS; Database=OrdersManager; Trusted_Connection=True;"));

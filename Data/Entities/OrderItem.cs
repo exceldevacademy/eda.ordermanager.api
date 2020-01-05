@@ -17,10 +17,7 @@ namespace eda.ordermanager.api.Data.Entities
 
         [Column("OrderId")]
         public int OrderId { get; set; }
-
-        [Column("VendorId")]
-        public int VendorId { get; set; }
-
+        
         [Column("CategoryId")]
         public int CategoryId { get; set; }
 
@@ -36,5 +33,10 @@ namespace eda.ordermanager.api.Data.Entities
         [Column("Comments")]
         public string Comments { get; set; }
 
+        [ForeignKey("OrderId")]
+        public CompanyOrder Order { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; }
     }
 }

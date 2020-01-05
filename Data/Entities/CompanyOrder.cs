@@ -25,10 +25,10 @@ namespace eda.ordermanager.api.Data.Entities
         public int VendorId { get; set; }
 
         [Column("PurchaseDate")]
-        public DateTimeOffset PurchaseDate { get; set; }
+        public DateTime PurchaseDate { get; set; }
 
         [Column("ArrivalDate")]
-        public DateTimeOffset ArrivalDate { get; set; }
+        public DateTime ArrivalDate { get; set; }
 
         [Column("Status")]
         public string Status { get; set; }
