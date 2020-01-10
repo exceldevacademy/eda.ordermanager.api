@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using eda.ordermanager.api.Data.Entities;
+using eda.ordermanager.api.Data.Models.CompanyOrder;
+using eda.ordermanager.api.Data.Models.Vendor;
 using eda.ordermanager.api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +30,7 @@ namespace eda.ordermanager.api.Controllers
         }
 
         [HttpGet("{companyOrderId}", Name ="GetCompanyOrder")]
-        public ActionResult<CompanyOrder> GetCompanyOrder(int companyOrderId)
+        public ActionResult<CompanyOrderDto> GetCompanyOrder(int companyOrderId)
         {
             var companyOrderFromRepo = _companyOrderRepository.GetCompanyOrder(companyOrderId);
 
@@ -37,7 +39,26 @@ namespace eda.ordermanager.api.Controllers
                 return NotFound();
             }
 
-            return Ok(companyOrderFromRepo);
+            var companyOrderDto = new CompanyOrderDto
+            {
+                CompanyOrderId = companyOrderFromRepo.CompanyOrderId,
+                InternalOrderNo = companyOrderFromRepo.InternalOrderNo,
+                ExternalOrderNo = companyOrderFromRepo.ExternalOrderNo,
+                VendorId = companyOrderFromRepo.VendorId,
+                PurchaseDate = companyOrderFromRepo.PurchaseDate,
+                ArrivalDate = companyOrderFromRepo.ArrivalDate,
+                Status = companyOrderFromRepo.Status,
+                Amount = companyOrderFromRepo.Amount,
+                Comments = companyOrderFromRepo.Comments,
+                TransitDays = (companyOrderFromRepo.ArrivalDate - companyOrderFromRepo.PurchaseDate).TotalDays,
+                Vendor = new VendorDto
+                {
+                    VendorId = companyOrderFromRepo.Vendor.VendorId,
+                    VendorName = companyOrderFromRepo.Vendor.VendorName
+                }
+            };
+
+            return Ok(companyOrderDto);
         }
 
         [HttpPost]

@@ -19,7 +19,9 @@ namespace eda.ordermanager.api.Services
 
         public CompanyOrder GetCompanyOrder(int orderid)
         {
-            return _context.CompanyOrders.FirstOrDefault(co => co.CompanyOrderId == orderid);
+            return _context.CompanyOrders
+              .Include(oi => oi.Vendor)
+              .FirstOrDefault(co => co.CompanyOrderId == orderid);
         }
 
         public IEnumerable<CompanyOrder> GetCompanyOrders()

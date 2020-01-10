@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using eda.ordermanager.api.Data.Entities;
+using eda.ordermanager.api.Data.Models.Vendor;
 using eda.ordermanager.api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,7 @@ namespace eda.ordermanager.api.Controllers
         }
 
         [HttpGet("{vendorId}", Name ="GetVendor")]
-        public ActionResult<Vendor> GetVendor(int vendorId)
+        public ActionResult<VendorDto> GetVendor(int vendorId)
         {
             var vendorFromRepo = _vendorRepository.GetVendor(vendorId);
 
@@ -37,7 +38,13 @@ namespace eda.ordermanager.api.Controllers
                 return NotFound();
             }
 
-            return Ok(vendorFromRepo);
+            var vendorDto = new VendorDto
+            {
+                VendorId = vendorFromRepo.VendorId,
+                VendorName = vendorFromRepo.VendorName
+            };
+
+            return Ok(vendorDto);
         }
 
         [HttpPost]
