@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using eda.ordermanager.api.Data.Entities;
+using eda.ordermanager.api.Data.Models.OrderItem;
 using eda.ordermanager.api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,22 +15,27 @@ namespace eda.ordermanager.api.Controllers
     public class OrderItemsController : ControllerBase
     {
         private readonly IOrderItemRepository _orderItemRepository;
+        private readonly IMapper _mapper;
 
-        public OrderItemsController(IOrderItemRepository orderItemRepository)
+        public OrderItemsController(IOrderItemRepository orderItemRepository, IMapper mapper)
         {
             _orderItemRepository = orderItemRepository ??
                 throw new ArgumentNullException(nameof(orderItemRepository));
+            _mapper = mapper ??
+                throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet()]
-        public ActionResult<IEnumerable<OrderItem>> GetOrderItems()
+        public ActionResult<IEnumerable<OrderItemDto>> GetOrderItems()
         {
             var orderItemsFromRepo = _orderItemRepository.GetOrderItems();
-            return Ok(orderItemsFromRepo);
+
+            var orderItemsDto = _mapper.Map<IEnumerable<OrderItemDto>>(orderItemsFromRepo);
+            return Ok(orderItemsDto);
         }
 
         [HttpGet("{orderItemId}", Name ="GetOrderItem")]
-        public ActionResult<OrderItem> GetOrderItem(int orderItemId)
+        public ActionResult<OrderItemDto> GetOrderItem(int orderItemId)
         {
             var orderItemFromRepo = _orderItemRepository.GetOrderItem(orderItemId);
 
@@ -37,18 +44,21 @@ namespace eda.ordermanager.api.Controllers
                 return NotFound();
             }
 
-            return Ok(orderItemFromRepo);
+            var orderItemDto = _mapper.Map<OrderItemDto>(orderItemFromRepo);
+            return Ok(orderItemDto);
         }
 
         [HttpPost]
-        public ActionResult<OrderItem> AddOrderItem(OrderItem orderItem)
+        public ActionResult<OrderItemDto> AddOrderItem(OrderItemForCreationDto orderItemForCreation)
         {
+            var orderItem = _mapper.Map<OrderItem>(orderItemForCreation);
             _orderItemRepository.AddOrderItem(orderItem);
             _orderItemRepository.Save();
 
+            var orderItemDto = _mapper.Map<OrderItemDto>(orderItem);
             return CreatedAtRoute("GetOrderItem",
-                new { orderItem.OrderItemId },
-                orderItem);
+                new { orderItemDto.OrderItemId },
+                orderItemDto);
         }
     }
 }

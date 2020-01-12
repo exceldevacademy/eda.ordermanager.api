@@ -19,7 +19,10 @@ namespace eda.ordermanager.api.Services
 
         public OrderItem GetOrderItem(int orderItemId)
         {
-            return _context.OrderItems.FirstOrDefault(v => v.OrderItemId == orderItemId);
+            return _context.OrderItems
+              .Include(oi => oi.Order)
+              .Include(oi => oi.Category)
+              .FirstOrDefault(v => v.OrderItemId == orderItemId);
         }
 
         public IEnumerable<OrderItem> GetOrderItems()

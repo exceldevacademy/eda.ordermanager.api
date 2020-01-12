@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using eda.ordermanager.api.Data.Entities;
+using eda.ordermanager.api.Data.Models.Category;
 using eda.ordermanager.api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,22 +15,27 @@ namespace eda.ordermanager.api.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IMapper _mapper;
 
-        public CategoriesController(ICategoryRepository categoryRepository)
+        public CategoriesController(ICategoryRepository categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository ??
                 throw new ArgumentNullException(nameof(categoryRepository));
+            _mapper = mapper ??
+                throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet()]
-        public ActionResult<IEnumerable<Category>> GetCategories()
+        public ActionResult<IEnumerable<CategoryDto>> GetCategories()
         {
-            var categorysFromRepo = _categoryRepository.GetCategories();
-            return Ok(categorysFromRepo);
+            var categoriesFromRepo = _categoryRepository.GetCategories();
+
+            var categoriesDto = _mapper.Map<IEnumerable<CategoryDto>>(categoriesFromRepo);
+            return Ok(categoriesDto);
         }
 
         [HttpGet("{categoryId}", Name ="GetCategory")]
-        public ActionResult<Category> GetCategory(int categoryId)
+        public ActionResult<CategoryDto> GetCategory(int categoryId)
         {
             var categoryFromRepo = _categoryRepository.GetCategory(categoryId);
 
@@ -37,18 +44,23 @@ namespace eda.ordermanager.api.Controllers
                 return NotFound();
             }
 
-            return Ok(categoryFromRepo);
+            var categoryDto = _mapper.Map<CategoryDto>(categoryFromRepo);
+
+            return Ok(categoryDto);
         }
 
         [HttpPost]
-        public ActionResult<Category> AddCategory(Category category)
+        public ActionResult<CategoryDto> AddCategory(CategoryForCreationDto categoryForCreation)
         {
+            var category = _mapper.Map<Category>(categoryForCreation);
+
             _categoryRepository.AddCategory(category);
             _categoryRepository.Save();
 
+            var categoryDto = _mapper.Map<CategoryDto>(category);
             return CreatedAtRoute("GetCategory",
-                new { category.CategoryId },
-                category);
+                new { categoryDto.CategoryId },
+                categoryDto);
         }
     }
 }
