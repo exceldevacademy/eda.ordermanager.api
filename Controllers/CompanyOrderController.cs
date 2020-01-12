@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using eda.ordermanager.api.Data.Entities;
 using eda.ordermanager.api.Data.Models.CompanyOrder;
 using eda.ordermanager.api.Data.Models.Vendor;
@@ -15,18 +16,23 @@ namespace eda.ordermanager.api.Controllers
     public class CompanyOrdersController : ControllerBase
     {
         private readonly ICompanyOrderRepository _companyOrderRepository;
+        private readonly IMapper _mapper;
 
-        public CompanyOrdersController(ICompanyOrderRepository companyOrderRepository)
+        public CompanyOrdersController(ICompanyOrderRepository companyOrderRepository, IMapper mapper)
         {
             _companyOrderRepository = companyOrderRepository ??
                 throw new ArgumentNullException(nameof(companyOrderRepository));
+            _mapper = mapper ??
+                throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet()]
-        public ActionResult<IEnumerable<CompanyOrder>> GetCompanyOrders()
+        public ActionResult<IEnumerable<CompanyOrderDto>> GetCompanyOrders()
         {
             var companyOrdersFromRepo = _companyOrderRepository.GetCompanyOrders();
-            return Ok(companyOrdersFromRepo);
+
+            var companyOrdersDto = _mapper.Map<IEnumerable<CompanyOrderDto>>(companyOrdersFromRepo);
+            return Ok(companyOrdersDto);
         }
 
         [HttpGet("{companyOrderId}", Name ="GetCompanyOrder")]
@@ -39,37 +45,23 @@ namespace eda.ordermanager.api.Controllers
                 return NotFound();
             }
 
-            var companyOrderDto = new CompanyOrderDto
-            {
-                CompanyOrderId = companyOrderFromRepo.CompanyOrderId,
-                InternalOrderNo = companyOrderFromRepo.InternalOrderNo,
-                ExternalOrderNo = companyOrderFromRepo.ExternalOrderNo,
-                VendorId = companyOrderFromRepo.VendorId,
-                PurchaseDate = companyOrderFromRepo.PurchaseDate,
-                ArrivalDate = companyOrderFromRepo.ArrivalDate,
-                Status = companyOrderFromRepo.Status,
-                Amount = companyOrderFromRepo.Amount,
-                Comments = companyOrderFromRepo.Comments,
-                TransitDays = (companyOrderFromRepo.ArrivalDate - companyOrderFromRepo.PurchaseDate).TotalDays,
-                Vendor = new VendorDto
-                {
-                    VendorId = companyOrderFromRepo.Vendor.VendorId,
-                    VendorName = companyOrderFromRepo.Vendor.VendorName
-                }
-            };
+            var companyOrderDto = _mapper.Map<CompanyOrderDto>(companyOrderFromRepo);
 
             return Ok(companyOrderDto);
         }
 
         [HttpPost]
-        public ActionResult<CompanyOrder> AddCompanyOrder(CompanyOrder companyOrder)
+        public ActionResult<CompanyOrderDto> AddCompanyOrder(CompanyOrderForCreationDto companyOrderForCreation)
         {
+            var companyOrder = _mapper.Map<CompanyOrder>(companyOrderForCreation);
+
             _companyOrderRepository.AddCompanyOrder(companyOrder);
             _companyOrderRepository.Save();
 
+            var companyOrderDto = _mapper.Map<CompanyOrderDto>(companyOrder);
             return CreatedAtRoute("GetCompanyOrder",
-                new { companyOrder.CompanyOrderId },
-                companyOrder);
+                new { companyOrderDto.CompanyOrderId },
+                companyOrderDto);
         }
     }
 }
