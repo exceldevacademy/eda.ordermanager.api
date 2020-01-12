@@ -11,6 +11,7 @@ namespace eda.ordermanager.api.Services.Interfaces
         CompanyOrder GetCompanyOrder(int companyOrderId);
         IEnumerable<CompanyOrder> GetCompanyOrders();
         void AddCompanyOrder(CompanyOrder companyOrder);
+        void DeleteCompanyOrder(CompanyOrder companyOrder);
         bool Save();
     }
 }

@@ -60,5 +60,21 @@ namespace eda.ordermanager.api.Controllers
                 new { orderItemDto.OrderItemId },
                 orderItemDto);
         }
+
+        [HttpDelete("{orderItemId}")]
+        public ActionResult DeleteOrderItem(int orderItemId)
+        {
+            var orderItemFromRepo = _orderItemRepository.GetOrderItem(orderItemId);
+
+            if (orderItemFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _orderItemRepository.DeleteOrderItem(orderItemFromRepo);
+            _orderItemRepository.Save();
+
+            return NoContent();
+        }
     }
 }

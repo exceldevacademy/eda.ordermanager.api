@@ -43,6 +43,16 @@ namespace eda.ordermanager.api.Services
             _context.OrderItems.Add(orderItem);
         }
 
+        public void DeleteOrderItem(OrderItem orderItem)
+        {
+            if (orderItem == null)
+            {
+                throw new ArgumentNullException(nameof(orderItem));
+            }
+
+            _context.OrderItems.Remove(orderItem);
+        }
+
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);

@@ -63,5 +63,21 @@ namespace eda.ordermanager.api.Controllers
                 new { companyOrderDto.CompanyOrderId },
                 companyOrderDto);
         }
+
+        [HttpDelete("{companyOrderId}")]
+        public ActionResult DeleteCompanyOrder(int companyOrderId)
+        {
+            var companyOrderFromRepo = _companyOrderRepository.GetCompanyOrder(companyOrderId);
+
+            if (companyOrderFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _companyOrderRepository.DeleteCompanyOrder(companyOrderFromRepo);
+            _companyOrderRepository.Save();
+
+            return NoContent();
+        }
     }
 }

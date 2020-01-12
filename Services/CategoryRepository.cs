@@ -36,6 +36,16 @@ namespace eda.ordermanager.api.Services
             _context.Categories.Add(category);
         }
 
+        public void DeleteCategory(Category category)
+        {
+            if (category == null)
+            {
+                throw new ArgumentNullException(nameof(category));
+            }
+
+            _context.Categories.Remove(category);
+        }
+
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);

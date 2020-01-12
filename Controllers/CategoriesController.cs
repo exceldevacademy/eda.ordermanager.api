@@ -62,5 +62,21 @@ namespace eda.ordermanager.api.Controllers
                 new { categoryDto.CategoryId },
                 categoryDto);
         }
+
+        [HttpDelete("{categoryId}")]
+        public ActionResult DeleteCategory(int categoryId)
+        {
+            var categoryFromRepo = _categoryRepository.GetCategory(categoryId);
+
+            if (categoryFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _categoryRepository.DeleteCategory(categoryFromRepo);
+            _categoryRepository.Save();
+
+            return NoContent();
+        }
     }
 }
