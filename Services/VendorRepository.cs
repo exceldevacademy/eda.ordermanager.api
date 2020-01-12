@@ -36,6 +36,16 @@ namespace eda.ordermanager.api.Services
             _context.Vendors.Add(vendor);
         }
 
+        public void DeleteVendor(Vendor vendor)
+        {
+            if(vendor == null)
+            {
+                throw new ArgumentNullException(nameof(vendor));
+            }
+
+            _context.Vendors.Remove(vendor);
+        }
+
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);

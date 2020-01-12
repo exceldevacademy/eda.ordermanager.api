@@ -62,5 +62,21 @@ namespace eda.ordermanager.api.Controllers
                 new { vendorDto.VendorId },
                 vendorDto);
         }
+
+        [HttpDelete("{vendorId}")]
+        public ActionResult DeleteVendor(int vendorId)
+        {
+            var vendorFromRepo = _vendorRepository.GetVendor(vendorId);
+
+            if(vendorFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _vendorRepository.DeleteVendor(vendorFromRepo);
+            _vendorRepository.Save();
+
+            return NoContent();
+        }
     }
 }
