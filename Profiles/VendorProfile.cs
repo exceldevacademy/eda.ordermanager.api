@@ -13,6 +13,7 @@ namespace eda.ordermanager.api.Profiles
         public VendorProfile()
         {
             CreateMap<Vendor, VendorDto>();
+            CreateMap<VendorForUpdateDto, Vendor>();
         }
     }
 }

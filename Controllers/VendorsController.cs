@@ -78,5 +78,23 @@ namespace eda.ordermanager.api.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("{vendorId}")]
+        public IActionResult UpdateVendor(int vendorId, VendorForUpdateDto vendor)
+        {
+            var vendorFromRepo = _vendorRepository.GetVendor(vendorId);
+
+            if (vendorFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(vendor, vendorFromRepo);
+            _vendorRepository.UpdateVendor(vendorFromRepo);
+
+            _vendorRepository.Save();
+
+            return NoContent();
+        }
     }
 }

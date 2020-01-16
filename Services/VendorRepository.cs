@@ -46,6 +46,11 @@ namespace eda.ordermanager.api.Services
             _context.Vendors.Remove(vendor);
         }
 
+        public void UpdateVendor(Vendor vendor)
+        {
+            // no implementation for now
+        }
+
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);
