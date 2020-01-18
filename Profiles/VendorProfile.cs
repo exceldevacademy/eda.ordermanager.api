@@ -14,6 +14,8 @@ namespace eda.ordermanager.api.Profiles
         {
             CreateMap<Vendor, VendorDto>();
             CreateMap<VendorForUpdateDto, Vendor>();
+            CreateMap<Vendor, VendorForUpdateDto>();
+            CreateMap<VendorForCreationDto, Vendor>();
         }
     }
 }

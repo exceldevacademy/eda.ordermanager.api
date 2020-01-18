@@ -40,7 +40,8 @@ namespace eda.ordermanager.api
             services.AddDbContextPool<OrdersManagerDbContext>(options =>
                 options.UseSqlServer("Server=DESKTOP-O585ETB\\SQLEXPRESS; Database=OrdersManager; Trusted_Connection=True;"));
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

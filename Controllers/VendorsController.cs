@@ -6,6 +6,7 @@ using AutoMapper;
 using eda.ordermanager.api.Data.Entities;
 using eda.ordermanager.api.Data.Models.Vendor;
 using eda.ordermanager.api.Services.Interfaces;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eda.ordermanager.api.Controllers
@@ -93,6 +94,37 @@ namespace eda.ordermanager.api.Controllers
             _vendorRepository.UpdateVendor(vendorFromRepo);
 
             _vendorRepository.Save();
+
+            return NoContent();
+        }
+
+        [HttpPatch("{vendorId}")]
+        public IActionResult PartiallyUpdateVendor(int vendorId, JsonPatchDocument<VendorForUpdateDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest();
+            }
+
+            var existingVendor = _vendorRepository.GetVendor(vendorId);
+
+            if (existingVendor == null)
+            {
+                return NotFound();
+            }
+
+            var vendorToPatch = _mapper.Map<VendorForUpdateDto>(existingVendor); // map the vendor we got from the database to an updatable vendor model
+            patchDoc.ApplyTo(vendorToPatch, ModelState); // apply patchdoc updates to the updatable vendor
+
+            if (!TryValidateModel(vendorToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(vendorToPatch, existingVendor); // apply updates from the updatable vendor to the db entity so we can apply the updates to the database
+            _vendorRepository.UpdateVendor(existingVendor); // apply business updates to data if needed
+
+            _vendorRepository.Save(); // save changes in the database
 
             return NoContent();
         }
