@@ -18,6 +18,8 @@ namespace eda.ordermanager.api.Profiles
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category));
 
             CreateMap<OrderItemForCreationDto, OrderItem>();
+            CreateMap<OrderItemForUpdateDto, OrderItem>()
+                .ReverseMap();
         }
     }
 }

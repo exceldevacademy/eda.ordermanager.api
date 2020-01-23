@@ -15,6 +15,8 @@ namespace eda.ordermanager.api.Profiles
         {
             CreateMap<Category, CategoryDto>();
             CreateMap<CategoryForCreationDto, Category>();
+            CreateMap<CategoryForUpdateDto, Category>()
+                .ReverseMap();
         }
     }
 }

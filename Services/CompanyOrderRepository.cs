@@ -51,6 +51,11 @@ namespace eda.ordermanager.api.Services
             _context.CompanyOrders.Remove(companyOrder);
         }
 
+        public void UpdateCompanyOrder(CompanyOrder companyOrder)
+        {
+            // no implementation for now
+        }
+
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);

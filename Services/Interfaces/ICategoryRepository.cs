@@ -12,6 +12,7 @@ namespace eda.ordermanager.api.Services.Interfaces
         IEnumerable<Category> GetCategories();
         void AddCategory(Category category);
         void DeleteCategory(Category category);
+        void UpdateCategory(Category category);
         bool Save();
     }
 }

@@ -17,6 +17,8 @@ namespace eda.ordermanager.api.Profiles
                 .ForMember(dest => dest.Vendor, opt => opt.MapFrom(src => src.Vendor));
 
             CreateMap<CompanyOrderForCreationDto, CompanyOrder>();
+            CreateMap<CompanyOrderForUpdateDto, CompanyOrder>()
+                .ReverseMap();
         }
     }
 }

@@ -53,6 +53,11 @@ namespace eda.ordermanager.api.Services
             _context.OrderItems.Remove(orderItem);
         }
 
+        public void UpdateOrderItem(OrderItem orderItem)
+        {
+            // no implementation for now
+        }
+
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);

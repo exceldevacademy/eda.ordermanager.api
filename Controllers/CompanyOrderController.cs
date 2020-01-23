@@ -7,6 +7,7 @@ using eda.ordermanager.api.Data.Entities;
 using eda.ordermanager.api.Data.Models.CompanyOrder;
 using eda.ordermanager.api.Data.Models.Vendor;
 using eda.ordermanager.api.Services.Interfaces;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eda.ordermanager.api.Controllers
@@ -76,6 +77,55 @@ namespace eda.ordermanager.api.Controllers
 
             _companyOrderRepository.DeleteCompanyOrder(companyOrderFromRepo);
             _companyOrderRepository.Save();
+
+            return NoContent();
+        }
+
+        [HttpPut("{companyOrderId}")]
+        public IActionResult UpdateCompanyOrder(int companyOrderId, CompanyOrderForUpdateDto companyOrder)
+        {
+            var companyOrderFromRepo = _companyOrderRepository.GetCompanyOrder(companyOrderId);
+
+            if (companyOrderFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(companyOrder, companyOrderFromRepo);
+            _companyOrderRepository.UpdateCompanyOrder(companyOrderFromRepo);
+
+            _companyOrderRepository.Save();
+
+            return NoContent();
+        }
+
+        [HttpPatch("{companyOrderId}")]
+        public IActionResult PartiallyUpdateCompanyOrder(int companyOrderId, JsonPatchDocument<CompanyOrderForUpdateDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest();
+            }
+
+            var existingCompanyOrder = _companyOrderRepository.GetCompanyOrder(companyOrderId);
+
+            if (existingCompanyOrder == null)
+            {
+                return NotFound();
+            }
+
+            var companyOrderToPatch = _mapper.Map<CompanyOrderForUpdateDto>(existingCompanyOrder); // map the companyOrder we got from the database to an updatable companyOrder model
+            patchDoc.ApplyTo(companyOrderToPatch, ModelState); // apply patchdoc updates to the updatable companyOrder
+
+            if (!TryValidateModel(companyOrderToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(companyOrderToPatch, existingCompanyOrder); // apply updates from the updatable companyOrder to the db entity so we can apply the updates to the database
+            _companyOrderRepository.UpdateCompanyOrder(existingCompanyOrder); // apply business updates to data if needed
+
+            _companyOrderRepository.Save(); // save changes in the database
 
             return NoContent();
         }

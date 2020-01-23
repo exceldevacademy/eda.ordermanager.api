@@ -12,6 +12,7 @@ namespace eda.ordermanager.api.Services.Interfaces
         IEnumerable<OrderItem> GetOrderItems();
         void AddOrderItem(OrderItem orderItem);
         void DeleteOrderItem(OrderItem orderItem);
+        void UpdateOrderItem(OrderItem orderItem);
         bool Save();
     }
 }
