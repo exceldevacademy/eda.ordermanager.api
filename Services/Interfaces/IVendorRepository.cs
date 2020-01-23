@@ -1,4 +1,5 @@
 ﻿using eda.ordermanager.api.Data.Entities;
+using eda.ordermanager.api.Data.Models.Vendor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace eda.ordermanager.api.Services.Interfaces
     public interface IVendorRepository
     {
         Vendor GetVendor(int vendorId);
-        IEnumerable<Vendor> GetVendors();
+        IEnumerable<Vendor> GetVendors(VendorParametersDto vendorParameters);
         void AddVendor(Vendor vendor);
         void DeleteVendor(Vendor vendor);
         void UpdateVendor(Vendor vendor);

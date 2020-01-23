@@ -27,9 +27,9 @@ namespace eda.ordermanager.api.Controllers
         }
 
         [HttpGet()]
-        public ActionResult<IEnumerable<VendorDto>> GetVendors()
+        public ActionResult<IEnumerable<VendorDto>> GetVendors([FromQuery]VendorParametersDto vendorParametersDto)
         {
-            var vendorsFromRepo = _vendorRepository.GetVendors();
+            var vendorsFromRepo = _vendorRepository.GetVendors(vendorParametersDto);
 
             var vendorsDto = _mapper.Map<IEnumerable<VendorDto>>(vendorsFromRepo);
             return Ok(vendorsDto);

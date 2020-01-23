@@ -1,5 +1,6 @@
 ﻿using eda.ordermanager.api.Context;
 using eda.ordermanager.api.Data.Entities;
+using eda.ordermanager.api.Data.Models.Vendor;
 using eda.ordermanager.api.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,19 @@ namespace eda.ordermanager.api.Services
             return _context.Vendors.FirstOrDefault(v => v.VendorId == vendorId);
         }
 
-        public IEnumerable<Vendor> GetVendors()
+        public IEnumerable<Vendor> GetVendors(VendorParametersDto vendorParameters)
         {
-            return _context.Vendors.ToList<Vendor>();
+            if (vendorParameters == null)
+            {
+                throw new ArgumentNullException(nameof(vendorParameters));
+            }
+
+            var collection = _context.Vendors as IQueryable<Vendor>;
+
+            return collection
+                .Skip((vendorParameters.PageNumber - 1) * vendorParameters.PageSize)
+                .Take(vendorParameters.PageSize)
+                .ToList();
         }
 
         public void AddVendor(Vendor vendor)
