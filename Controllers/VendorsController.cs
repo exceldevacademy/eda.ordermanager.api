@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using eda.ordermanager.api.Data.Entities;
@@ -30,6 +31,19 @@ namespace eda.ordermanager.api.Controllers
         public ActionResult<IEnumerable<VendorDto>> GetVendors([FromQuery]VendorParametersDto vendorParametersDto)
         {
             var vendorsFromRepo = _vendorRepository.GetVendors(vendorParametersDto);
+
+            var paginationMetadata = new
+            {
+                totalCount = vendorsFromRepo.TotalCount,
+                pageSize = vendorsFromRepo.PageSize,
+                currentPage = vendorsFromRepo.CurrentPage,
+                totalPages = vendorsFromRepo.TotalPages,
+                previousPageLink = vendorsFromRepo.HasPrevious,
+                nextPageLink = vendorsFromRepo.HasNext
+            };
+
+            Response.Headers.Add("X-Pagination",
+                JsonSerializer.Serialize(paginationMetadata));
 
             var vendorsDto = _mapper.Map<IEnumerable<VendorDto>>(vendorsFromRepo);
             return Ok(vendorsDto);
