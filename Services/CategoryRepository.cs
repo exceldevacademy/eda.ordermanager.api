@@ -1,5 +1,7 @@
 ﻿using eda.ordermanager.api.Context;
 using eda.ordermanager.api.Data.Entities;
+using eda.ordermanager.api.Data.Models.Category;
+using eda.ordermanager.api.Helpers;
 using eda.ordermanager.api.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,9 +23,19 @@ namespace eda.ordermanager.api.Services
             return _context.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
         }
 
-        public IEnumerable<Category> GetCategories()
+        public PagedList<Category> GetCategories(CategoryParametersDto categoryParameters)
         {
-            return _context.Categories.ToList<Category>();
+
+            if (categoryParameters == null)
+            {
+                throw new ArgumentNullException(nameof(categoryParameters));
+            }
+
+            var collection = _context.Categories as IQueryable<Category>;
+
+            return PagedList<Category>.Create(collection,
+                categoryParameters.PageNumber,
+                categoryParameters.PageSize);
         }
 
         public void AddCategory(Category category)

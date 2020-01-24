@@ -1,5 +1,7 @@
 ﻿using eda.ordermanager.api.Context;
 using eda.ordermanager.api.Data.Entities;
+using eda.ordermanager.api.Data.Models.OrderItem;
+using eda.ordermanager.api.Helpers;
 using eda.ordermanager.api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,12 +27,21 @@ namespace eda.ordermanager.api.Services
               .FirstOrDefault(v => v.OrderItemId == orderItemId);
         }
 
-        public IEnumerable<OrderItem> GetOrderItems()
+        public PagedList<OrderItem> GetOrderItems(OrderItemParametersDto orderItemParameters)
         {
-            return _context.OrderItems
+
+            if (orderItemParameters == null)
+            {
+                throw new ArgumentNullException(nameof(orderItemParameters));
+            }
+
+            var collection = _context.OrderItems
               .Include(oi => oi.Order)
-              .Include(oi => oi.Category)
-              .ToList<OrderItem>();
+              .Include(oi => oi.Category) as IQueryable<OrderItem>;
+
+            return PagedList<OrderItem>.Create(collection,
+                orderItemParameters.PageNumber,
+                orderItemParameters.PageSize);
         }
 
         public void AddOrderItem(OrderItem orderItem)

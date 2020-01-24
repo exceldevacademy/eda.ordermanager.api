@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using eda.ordermanager.api.Data.Entities;
@@ -27,9 +28,22 @@ namespace eda.ordermanager.api.Controllers
         }
 
         [HttpGet()]
-        public ActionResult<IEnumerable<CategoryDto>> GetCategories()
+        public ActionResult<IEnumerable<CategoryDto>> GetCategories([FromQuery] CategoryParametersDto categoryParametersDto)
         {
-            var categoriesFromRepo = _categoryRepository.GetCategories();
+            var categoriesFromRepo = _categoryRepository.GetCategories(categoryParametersDto);
+
+            var paginationMetadata = new
+            {
+                totalCount = categoriesFromRepo.TotalCount,
+                pageSize = categoriesFromRepo.PageSize,
+                currentPage = categoriesFromRepo.CurrentPage,
+                totalPages = categoriesFromRepo.TotalPages,
+                previousPageLink = categoriesFromRepo.HasPrevious,
+                nextPageLink = categoriesFromRepo.HasNext
+            };
+
+            Response.Headers.Add("X-Pagination",
+                JsonSerializer.Serialize(paginationMetadata));
 
             var categoriesDto = _mapper.Map<IEnumerable<CategoryDto>>(categoriesFromRepo);
             return Ok(categoriesDto);
