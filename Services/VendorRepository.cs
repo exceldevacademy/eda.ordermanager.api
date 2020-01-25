@@ -32,6 +32,12 @@ namespace eda.ordermanager.api.Services
 
             var collection = _context.Vendors as IQueryable<Vendor>;
 
+            if (!string.IsNullOrWhiteSpace(vendorParameters.VendorName))
+            {
+                var vendorName = vendorParameters.VendorName.Trim();
+                collection = collection.Where(v => v.VendorName == vendorName);
+            }
+
             return PagedList<Vendor>.Create(collection,
                 vendorParameters.PageNumber, 
                 vendorParameters.PageSize);

@@ -8,5 +8,6 @@ namespace eda.ordermanager.api.Data.Models.Category
 {
     public class CategoryParametersDto : PaginationParameters
     {
+        public string CategoryName { get; set; }
     }
 }

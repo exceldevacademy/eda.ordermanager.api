@@ -33,6 +33,12 @@ namespace eda.ordermanager.api.Services
 
             var collection = _context.Categories as IQueryable<Category>;
 
+            if (!string.IsNullOrWhiteSpace(categoryParameters.CategoryName))
+            {
+                var categoryName = categoryParameters.CategoryName.Trim();
+                collection = collection.Where(c => c.CategoryName == categoryName);
+            }
+            
             return PagedList<Category>.Create(collection,
                 categoryParameters.PageNumber,
                 categoryParameters.PageSize);

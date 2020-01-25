@@ -39,6 +39,20 @@ namespace eda.ordermanager.api.Services
               .Include(oi => oi.Order)
               .Include(oi => oi.Category) as IQueryable<OrderItem>;
 
+            if (!string.IsNullOrWhiteSpace(orderItemParameters.ExternalOrderNo))
+            {
+                var externalOrderNo = orderItemParameters.ExternalOrderNo.Trim();
+                collection = collection.Where(oi => oi.Order.ExternalOrderNo == externalOrderNo);
+            }
+
+            if (!string.IsNullOrWhiteSpace(orderItemParameters.QueryString))
+            {
+                var QueryString = orderItemParameters.QueryString.Trim();
+                collection = collection.Where(oi => oi.ProductName.Contains(QueryString)
+                    || oi.Status.Contains(QueryString)
+                    || oi.Comments.Contains(QueryString));
+            }
+
             return PagedList<OrderItem>.Create(collection,
                 orderItemParameters.PageNumber,
                 orderItemParameters.PageSize);
