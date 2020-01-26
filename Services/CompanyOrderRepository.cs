@@ -4,6 +4,8 @@ using eda.ordermanager.api.Data.Models.CompanyOrder;
 using eda.ordermanager.api.Helpers;
 using eda.ordermanager.api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Sieve.Models;
+using Sieve.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +16,12 @@ namespace eda.ordermanager.api.Services
     public class CompanyOrderRepository : ICompanyOrderRepository
     {
         private readonly OrdersManagerDbContext _context;
-        public CompanyOrderRepository(OrdersManagerDbContext context)
+        private readonly SieveProcessor _sieveProcessor;
+
+        public CompanyOrderRepository(OrdersManagerDbContext context, SieveProcessor sieveProcessor)
         {
             _context = context;
+            _sieveProcessor = sieveProcessor;
         }
 
         public CompanyOrder GetCompanyOrder(int orderid)
@@ -49,6 +54,13 @@ namespace eda.ordermanager.api.Services
                     || co.InternalOrderNo.Contains(QueryString)
                     || co.Comments.Contains(QueryString));
             }
+
+            var sieveModel = new SieveModel
+            {
+                Sorts = companyOrderParameters.SortOrder
+            };
+
+            collection = _sieveProcessor.Apply(sieveModel, collection);
 
             return PagedList<CompanyOrder>.Create(collection,
                 companyOrderParameters.PageNumber,

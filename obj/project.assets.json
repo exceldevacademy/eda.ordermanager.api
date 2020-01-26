@@ -1104,6 +1104,20 @@
           }
         }
       },
+      "Sieve/2.3.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CSharp": "4.4.1",
+          "Microsoft.Extensions.Options": "2.0.0",
+          "System.ComponentModel.Annotations": "4.4.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/Sieve.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Sieve.dll": {}
+        }
+      },
       "System.AppContext/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -4252,6 +4266,18 @@
         "runtimes/win-x86/native/sni.dll",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "Sieve/2.3.3": {
+      "sha512": "xmmQ/uEvTiU1SGgYkFe4xGa2KulFwjvrgZRCBnzaWzErfaQ7Dbr8C9NDdt66XSspreDOUHvOMXixetlDSqwsXg==",
+      "type": "package",
+      "path": "sieve/2.3.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Sieve.dll",
+        "sieve.2.3.3.nupkg.sha512",
+        "sieve.nuspec"
       ]
     },
     "System.AppContext/4.3.0": {
@@ -8373,7 +8399,8 @@
       "Microsoft.EntityFrameworkCore.Tools >= 3.0.0",
       "Microsoft.Extensions.Logging.Debug >= 3.0.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 3.0.0",
-      "Newtonsoft.Json >= 12.0.3"
+      "Newtonsoft.Json >= 12.0.3",
+      "Sieve >= 2.3.3"
     ]
   },
   "packageFolders": {
@@ -8450,6 +8477,10 @@
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[12.0.3, )"
+          },
+          "Sieve": {
+            "target": "Package",
+            "version": "[2.3.3, )"
           }
         },
         "imports": [

@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Sieve.Services;
 
 namespace eda.ordermanager.api
 {
@@ -36,6 +37,8 @@ namespace eda.ordermanager.api
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<ICompanyOrderRepository, CompanyOrderRepository>();
+
+            services.AddScoped<SieveProcessor>();
 
             services.AddDbContextPool<OrdersManagerDbContext>(options =>
                 options.UseSqlServer("Server=DESKTOP-O585ETB\\SQLEXPRESS; Database=OrdersManager; Trusted_Connection=True;"));
