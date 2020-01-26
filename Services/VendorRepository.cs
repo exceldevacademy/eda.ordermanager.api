@@ -3,6 +3,8 @@ using eda.ordermanager.api.Data.Entities;
 using eda.ordermanager.api.Data.Models.Vendor;
 using eda.ordermanager.api.Helpers;
 using eda.ordermanager.api.Services.Interfaces;
+using Sieve.Models;
+using Sieve.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +15,12 @@ namespace eda.ordermanager.api.Services
     public class VendorRepository : IVendorRepository
     {
         private readonly OrdersManagerDbContext _context;
-        public VendorRepository(OrdersManagerDbContext context)
+        private readonly SieveProcessor _sieveProcessor;
+
+        public VendorRepository(OrdersManagerDbContext context, SieveProcessor sieveProcessor)
         {
             _context = context;
+            _sieveProcessor = sieveProcessor;
         }
 
         public Vendor GetVendor(int vendorId)
@@ -37,6 +42,14 @@ namespace eda.ordermanager.api.Services
                 var vendorName = vendorParameters.VendorName.Trim();
                 collection = collection.Where(v => v.VendorName == vendorName);
             }
+
+            var sieveModel = new SieveModel
+            {
+                Sorts = vendorParameters.SortOrder
+            };
+
+            collection = _sieveProcessor.Apply(sieveModel, collection);
+
 
             return PagedList<Vendor>.Create(collection,
                 vendorParameters.PageNumber, 

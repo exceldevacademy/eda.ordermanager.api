@@ -3,6 +3,8 @@ using eda.ordermanager.api.Data.Entities;
 using eda.ordermanager.api.Data.Models.Category;
 using eda.ordermanager.api.Helpers;
 using eda.ordermanager.api.Services.Interfaces;
+using Sieve.Models;
+using Sieve.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +15,12 @@ namespace eda.ordermanager.api.Services
     public class CategoryRepository : ICategoryRepository
     {
         private readonly OrdersManagerDbContext _context;
-        public CategoryRepository(OrdersManagerDbContext context)
+        private readonly SieveProcessor _sieveProcessor;
+
+        public CategoryRepository(OrdersManagerDbContext context, SieveProcessor sieveProcessor)
         {
             _context = context;
+            _sieveProcessor = sieveProcessor;
         }
 
         public Category GetCategory(int categoryId)
@@ -38,7 +43,15 @@ namespace eda.ordermanager.api.Services
                 var categoryName = categoryParameters.CategoryName.Trim();
                 collection = collection.Where(c => c.CategoryName == categoryName);
             }
-            
+
+            var sieveModel = new SieveModel
+            {
+                Sorts = categoryParameters.SortOrder
+            };
+
+            collection = _sieveProcessor.Apply(sieveModel, collection);
+
+
             return PagedList<Category>.Create(collection,
                 categoryParameters.PageNumber,
                 categoryParameters.PageSize);

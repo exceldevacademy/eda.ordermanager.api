@@ -9,5 +9,6 @@ namespace eda.ordermanager.api.Data.Models.Vendor
     public class VendorParametersDto : PaginationParameters
     {
         public string VendorName { get; set; }
+        public string SortOrder { get; set; }
     }
 }

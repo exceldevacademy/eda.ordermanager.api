@@ -11,5 +11,6 @@ namespace eda.ordermanager.api.Data.Models.OrderItem
         public string ExternalOrderNo { get; set; }
 
         public string QueryString { get; set; }
+        public string SortOrder { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sieve.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,12 +23,15 @@ namespace eda.ordermanager.api.Data.Entities
         public int CategoryId { get; set; }
 
         [Column("ProductName")]
+        [Sieve(CanSort = true)]
         public string ProductName { get; set; }
 
         [Column("Status")]
+        [Sieve(CanSort = true)]
         public string Status { get; set; }
 
         [Column("Amount")]
+        [Sieve(CanSort = true)]
         public int Amount { get; set; }
 
         [Column("Comments")]
