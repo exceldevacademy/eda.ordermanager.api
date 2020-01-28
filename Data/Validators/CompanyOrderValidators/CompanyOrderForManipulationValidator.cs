@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace eda.ordermanager.api.Data.Validators
+namespace eda.ordermanager.api.Data.Validators.CompanyOrderValidators
 {
     public class CompanyOrderForManipulationValidator<T> : AbstractValidator<T> where T : CompanyOrderForManipulationDto
     {

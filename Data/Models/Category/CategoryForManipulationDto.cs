@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace eda.ordermanager.api.Data.Models.Category
 {
-    public class CategoryForCreationDto : CategoryForManipulationDto
+    public abstract class CategoryForManipulationDto
     {
-
+        public string CategoryName { get; set; }
     }
 }

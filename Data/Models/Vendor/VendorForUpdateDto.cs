@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 namespace eda.ordermanager.api.Data.Models.Vendor
 {
-    public class VendorForUpdateDto
+    public class VendorForUpdateDto : VendorForManipulationDto
     {
-        public string VendorName { get; set; }
     }
 }
