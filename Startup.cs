@@ -6,6 +6,7 @@ using AutoMapper;
 using eda.ordermanager.api.Context;
 using eda.ordermanager.api.Services;
 using eda.ordermanager.api.Services.Interfaces;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,6 +38,9 @@ namespace eda.ordermanager.api
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<ICompanyOrderRepository, CompanyOrderRepository>();
+
+            services.AddMvc()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.AddScoped<SieveProcessor>();
 
