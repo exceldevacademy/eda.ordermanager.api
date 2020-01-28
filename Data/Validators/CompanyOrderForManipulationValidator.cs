@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace eda.ordermanager.api.Data.Validators
 {
-    public class CompanyOrderValidator : AbstractValidator<CompanyOrderForCreationDto>
+    public class CompanyOrderForManipulationValidator<T> : AbstractValidator<T> where T : CompanyOrderForManipulationDto
     {
-        public CompanyOrderValidator()
+        public CompanyOrderForManipulationValidator()
         {
             RuleFor(co => co.Amount).GreaterThanOrEqualTo(0);
             RuleFor(co => co.Amount).NotEmpty();

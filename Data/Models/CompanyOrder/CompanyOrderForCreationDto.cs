@@ -6,15 +6,7 @@ using System.Threading.Tasks;
 
 namespace eda.ordermanager.api.Data.Models.CompanyOrder
 {
-    public class CompanyOrderForCreationDto
+    public class CompanyOrderForCreationDto : CompanyOrderForManipulationDto
     {
-        public string InternalOrderNo { get; set; }
-        public string ExternalOrderNo { get; set; }
-        public int VendorId { get; set; }
-        public DateTime PurchaseDate { get; set; }
-        public DateTime ArrivalDate { get; set; }
-        public string Status { get; set; }
-        public int Amount { get; set; }
-        public string Comments { get; set; }
     }
 }
