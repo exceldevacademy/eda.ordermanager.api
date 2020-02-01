@@ -13,7 +13,7 @@ namespace eda.ordermanager.api.Profiles
         public CompanyOrderProfile()
         {
             CreateMap<CompanyOrder, CompanyOrderDto>()
-                .ForMember(dest => dest.TransitDays, opt => opt.MapFrom(src => (src.ArrivalDate - src.PurchaseDate).TotalDays))
+                .ForMember(dest => dest.TransitDays, opt => opt.MapFrom(src => (src.ArrivalDate.Value - src.PurchaseDate.Value).TotalDays))
                 .ForMember(dest => dest.Vendor, opt => opt.MapFrom(src => src.Vendor));
 
             CreateMap<CompanyOrderForCreationDto, CompanyOrder>();

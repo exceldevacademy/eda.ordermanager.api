@@ -17,10 +17,10 @@ namespace eda.ordermanager.api.Data.Entities
         public int OrderItemId { get; set; }
 
         [Column("OrderId")]
-        public int OrderId { get; set; }
+        public int? OrderId { get; set; }
         
         [Column("CategoryId")]
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
         [Column("ProductName")]
         [Sieve(CanSort = true)]
@@ -32,15 +32,15 @@ namespace eda.ordermanager.api.Data.Entities
 
         [Column("Amount")]
         [Sieve(CanSort = true)]
-        public int Amount { get; set; }
+        public int? Amount { get; set; }
 
         [Column("Comments")]
         public string Comments { get; set; }
 
         [ForeignKey("OrderId")]
-        public CompanyOrder Order { get; set; }
+        public CompanyOrder Order { get; set; } = new CompanyOrder { };
 
         [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
+        public Category Category { get; set; } = new Category { };
     }
 }

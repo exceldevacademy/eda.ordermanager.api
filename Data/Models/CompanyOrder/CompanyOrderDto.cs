@@ -12,12 +12,12 @@ namespace eda.ordermanager.api.Data.Models.CompanyOrder
         public string InternalOrderNo { get; set; }
         public string ExternalOrderNo { get; set; }
         public int VendorId { get; set; }
-        public DateTime PurchaseDate { get; set; }
-        public DateTime ArrivalDate { get; set; }
+        public DateTime? PurchaseDate { get; set; }
+        public DateTime? ArrivalDate { get; set; }
         public string Status { get; set; }
         public int Amount { get; set; }
         public string Comments { get; set; }
-        public VendorDto Vendor { get; set; }
+        public VendorDto Vendor { get; set; } = new VendorDto { };
         public double TransitDays { get; set; }
     }
 }
